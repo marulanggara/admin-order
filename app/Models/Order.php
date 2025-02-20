@@ -21,12 +21,12 @@ class Order extends Model
     // relasi dengan tabel customers
     public function customer()
     {
-        return $this->belongsTo(Customer::class, 'customer_id');
+        return $this->belongsTo(Customer::class, 'customer_id', 'id');
     }
 
     // relasi dengan tabel order_products
     public function orderProducts()
     {
-        return $this->hasMany(OrderProduct::class, 'order_id');
+        return $this->hasMany(OrderProduct::class, 'order_id', 'id');
     }
 }

@@ -94,7 +94,7 @@ return [
             'charset' => env('DB_CHARSET', 'utf8'),
             'prefix' => '',
             'prefix_indexes' => true,
-            'search_path' => ['public', 'master_tables', 'transaction'],
+            'schema' => ['public', 'master_tables', 'transaction'],
             'sslmode' => 'prefer',
         ],
 

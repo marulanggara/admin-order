@@ -2,32 +2,33 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Models\Product;
+use App\Queries\QProduct;
 
 class ProductController extends Controller
 {
-    public function index()
+    protected $productQuery;
+
+    public function index(QProduct $productQuery)
     {
-        $products = Product::all();
         return response()->json([
             'status' => 200,
             'message' => 'Product list',
-            'data' => $products
+            'data' => $productQuery->getAllProducts()
         ], 200);
     }
 
-    public function show($id)
+    public function show(QProduct $productQuery, $id)
     {
-        $product = Product::findOrFail($id);
         return response()->json([
             'status' => 200,
             'message' => 'Product found',
-            'data' => $product
+            'data' => $productQuery->getProductById($id)
         ], 200);
     }
 
-    public function store(Request $request)
+    public function store(Request $request, QProduct $productQuery)
     {
         $request->validate([
             'name' => 'required',
@@ -35,33 +36,30 @@ class ProductController extends Controller
             'description' => 'required',
             'selling_price' => 'required',
         ]);
-        $product = Product::create($request->all());
         return response()->json([
             'status' => 201,
             'message' => 'Product created successfully',
-            'data' => $product
+            'data' => $productQuery->storeProduct($request)
         ], 201);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $id, QProduct $productQuery)
     {
         $product = Product::findOrFail($id);
-        $product->update($request->all());
         return response()->json([
             'status' => 200,
             'message' => 'Product updated successfully',
-            'data' => $product
+            'data' => $productQuery->updateProduct($request, $id)
         ], 200);
     }
 
-    public function destroy($id)
+    public function destroy($id, QProduct $productQuery)
     {
         $product = Product::findOrFail($id);
-        $product->delete();
         return response()->json([
             'status' => 200,
             'message' => 'Product deleted successfully',
-            'data' => $product
+            'data' => $productQuery->destroyProduct($id)
         ], 200);
     }
 }
